@@ -20,7 +20,7 @@ app.use(
 );
 
 app.get("/api/health", (req, res) => {
-  res.send("Welcome to Ek Cup Chai Backend. API is running fine");
+  res.send("Welcome to Ek Cup Chai Backend. API is running fine...");
 });
 
 app.use("/api/location", locationRoutes);
