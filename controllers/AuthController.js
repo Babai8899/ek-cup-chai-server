@@ -66,6 +66,8 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { username, password } = req.body;
 
+    console.log("Login attempt:", username);
+
     //validate username and password are not empty
     if (!username || !password) {
         return res.status(400).json({ message: "Username and password are required" });
