@@ -26,10 +26,10 @@ const register = async (req, res) => {
     if (!passwordRegex.test(password)) {
         return res.status(400).json({ message: "Password must be 8-20 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character" });
     }
-    // Validate name
+    // Validate firstName and lastName
     const nameRegex = /^[A-Za-z]{2,30}$/;
-    if (!nameRegex.test(name)) {
-        return res.status(400).json({ message: "Name must be 2-30 characters long and contain only alphabets" });
+    if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+        return res.status(400).json({ message: "First name and last name must be 2-30 characters long and contain only alphabets" });
     }
     // Validate phone
     const phoneRegex = /^\d{10}$/;
@@ -72,7 +72,7 @@ const login = async (req, res) => {
     }
 
     try {
-        const user = await UserModel.findOne({ username }).select('+password');
+        const user = await UserModel.findOne({ username }).select("+password");
         if (!user) {
             return res.status(401).json({ message: "Invalid username" });
         }
@@ -116,17 +116,15 @@ const logout = (req, res) => {
 }
 
 const getUser = async (req, res) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
-    
-    if (!token) {
+    const accessToken = req.cookies.accessToken;
+    if (!accessToken) {
         return res.status(401).json({ message: "No access token provided" });
     }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-        const { profileImage, password: userPassword, ...userPayload } = decoded.user;
-        // Return user details (without profileImage and password)
-        res.status(200).json(userPayload);
+        const decoded = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
+    const { profileImage, password: userPassword, ...userPayload } = decoded.user;
+    // Return user details (without profileImage and password)
+    res.status(200).json(userPayload);
     } catch (error) {
         console.error("Error fetching user:", error);
         res.status(403).json({ message: "Forbidden" });
