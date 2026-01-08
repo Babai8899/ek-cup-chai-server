@@ -2,6 +2,12 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
     {
+        username: {
+            type: String,
+            required: true,
+            trim: true,
+            unique: true,
+        },
         name: {
             type: String,
             required: true,
@@ -20,24 +26,32 @@ const userSchema = new mongoose.Schema(
             minlength: 6,
             select: false,
         },
-        phone: {
+        mobile: {
             type: String,
             trim: true,
+            unique: true,
         },
-        avatar: {
-            type: String,
-        },
-        isActive: {
+        isAdmin: {
             type: Boolean,
-            default: true,
+            default: false,
         },
-        role: {
+        dob: {
+            type: Date,
+            default: null,
+        },
+        gender: {
             type: String,
-            enum: ['user', 'admin'],
-            default: 'user',
+            enum: ['male', 'female', 'other'],
+            default: 'other',
+        },
+        address: {
+            type: String,
+            trim: true,
         },
     },
     { timestamps: true }
 );
 
-export default mongoose.model('User', userSchema);
+const UserModel = mongoose.model('User', userSchema);
+
+export default UserModel;
