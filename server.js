@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoutes from './routes/AuthRoute.js';
 import userRoutes from "./routes/UserRoute.js";
+import foodRoutes from "./routes/FoodRoute.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -54,4 +55,5 @@ app.use("/api/distance", distanceRoutes);
 
 
 app.use('/api/auth', authRoutes);
-app.use ('/api/user', userRoutes)
+app.use ('/api/user', userRoutes);
+app.use('/api/food', foodRoutes);

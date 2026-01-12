@@ -6,6 +6,7 @@ const foodSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
+            unique: true,
         },
         description: {
             type: String,
@@ -23,9 +24,10 @@ const foodSchema = new mongoose.Schema(
         image: {
             type: String,
         },
-        available: {
-            type: Boolean,
-            default: true,
+        type: {
+            type: String,
+            enum: ['veg', 'non-veg'],
+            required: true,
         },
         createdAt: {
             type: Date,
@@ -35,4 +37,6 @@ const foodSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-export default mongoose.model('Food', foodSchema);
+const FoodModel = mongoose.model('Food', foodSchema);
+
+export default FoodModel;
