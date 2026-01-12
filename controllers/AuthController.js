@@ -26,10 +26,10 @@ const register = async (req, res) => {
     if (!passwordRegex.test(password)) {
         return res.status(400).json({ message: "Password must be 8-20 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character" });
     }
-    // Validate firstName and lastName
-    const nameRegex = /^[A-Za-z]{2,30}$/;
-    if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
-        return res.status(400).json({ message: "First name and last name must be 2-30 characters long and contain only alphabets" });
+    // Validate Name
+    const nameRegex = /^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/;
+    if (!nameRegex.test(name)) {
+        return res.status(400).json({ message: "Name must start with an uppercase letter and contain only alphabets" });
     }
     // Validate phone
     const phoneRegex = /^\d{10}$/;
