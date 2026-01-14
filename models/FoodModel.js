@@ -29,6 +29,11 @@ const foodSchema = new mongoose.Schema(
             enum: ['veg', 'non-veg'],
             required: true,
         },
+        tag: {
+            type: String,
+            trim: true,
+            enum: ['BEST_SELLER', 'CHEF_SPECIAL'],
+        },
         createdAt: {
             type: Date,
             default: Date.now,
