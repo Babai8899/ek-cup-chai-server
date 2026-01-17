@@ -2,7 +2,7 @@ import FoodModel from "../models/FoodModel.js";
 
 const addFood = async (req, res) => {
     try {
-        const { name, description, price, category, type } = req.body;
+        const { name, description, price, category, type, tag, image } = req.body;
 
         if (!name || !price || !category || !type) {
             return res.status(400).json({ message: "Name, price, category, and type are required fields" });
@@ -18,7 +18,9 @@ const addFood = async (req, res) => {
             description,
             price,
             category,
-            type
+            type,
+            tag,
+            image
         });
         await newFood.save();
         res.status(201).json({ message: "Food added successfully", food: newFood });

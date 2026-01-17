@@ -1,4 +1,5 @@
 import UserModel from "../models/UserModel.js";
+import AddressModel from "../models/AddressModel.js";
 
 const getAllUsers = async (req, res) => {
     try {
@@ -6,7 +7,17 @@ const getAllUsers = async (req, res) => {
         if (!users) {
             return res.status(404).json({ message: "No users found" });
         }
-        res.status(200).json({ users });
+        
+        const usersWithAddresses = await Promise.all(users.map(async (user) => {
+            const userObj = user.toObject();
+            if (user.address) {
+                const address = await AddressModel.findById(user.address);
+                userObj.address = address;
+            }
+            return userObj;
+        }));
+
+        res.status(200).json({ users: usersWithAddresses });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
     }
@@ -58,4 +69,23 @@ const deleteUser = async (req, res) => {
     }
 }
 
-export { getAllUsers,updateUser, deleteUser };
+const updateUserAddress = async (req, res) => {
+    const username = req.user.username;
+    const { addressId } = req.body;
+    if (!addressId) {
+        return res.status(400).json({ message: "Address ID is required" });
+    }
+    try {
+        const user = await UserModel.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        user.address = addressId;
+        await user.save();
+        res.status(200).json({ message: "User address updated successfully", user });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+}
+
+export { getAllUsers,updateUser, deleteUser, updateUserAddress };
